@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Stock Price Predictor</title>
+    <style>
+        /* Black, green, and pink theme */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #121212; /* dark black */
+            margin: 0;
+            padding: 0;
+            color: #E0E0E0; /* light gray text */
+        }
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+            background-color: #1E1E1E; /* very dark gray */
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3); /* green shadow */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #FF66B2; /* bright pink */
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-shadow: 0 0 8px #FF66B2;
+        }
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        label {
+            font-weight: 600;
+            color: #39FF14; /* neon green */
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #FF66B2; /* pink border */
+            border-radius: 12px;
+            margin-top: 5px;
+            background-color: #2C2C2C; /* dark gray input */
+            color: #E0E0E0;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+        input[type="number"]::placeholder {
+            color: #999;
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #39FF14; /* neon green focus */
+            background-color: #1B1B1B;
+            color: #39FF14;
+        }
+        button {
+            grid-column: span 2;
+            padding: 14px;
+            font-size: 18px;
+            background: linear-gradient(90deg, #39FF14, #FF66B2); /* green to pink */
+            color: #121212;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(255, 102, 178, 0.7);
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #FF66B2, #39FF14);
+            box-shadow: 0 8px 25px rgba(57, 255, 20, 0.9);
+            color: #121212;
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 22px;
+            text-align: center;
+            color: #39FF14; /* neon green */
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px #39FF14;
+        }
+        .graphs {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        img {
+            width: 100%;
+            border-radius: 14px;
+            box-shadow: 0 0 20px rgba(255, 102, 178, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        img:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.7);
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 15px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📈 Stock Price Predictor</h1>
+    <form action="/predict" method="post">
+        <div>
+            <label for="open">Open</label>
+            <input type="number" step="any" name="open" placeholder="e.g. 100.5" required />
+        </div>
+        <div>
+            <label for="high">High</label>
+            <input type="number" step="any" name="high" placeholder="e.g. 105.0" required />
+        </div>
+        <div>
+            <label for="low">Low</label>
+            <input type="number" step="any" name="low" placeholder="e.g. 99.0" required />
+        </div>
+        <div>
+            <label for="volume">Volume</label>
+            <input type="number" step="any" name="volume" placeholder="e.g. 1500000" required />
+        </div>
+        <div>
+            <label for="hl_pct">HL %</label>
+            <input type="number" step="any" name="hl_pct" placeholder="e.g. 5.0" required />
+        </div>
+        <div>
+            <label for="pct_change">Pct Change</label>
+            <input type="number" step="any" name="pct_change" placeholder="e.g. 1.2" required />
+        </div>
+        <div>
+            <label for="ma10">MA10</label>
+            <input type="number" step="any" name="ma10" placeholder="e.g. 102.3" required />
+        </div>
+        <div>
+            <label for="ma50">MA50</label>
+            <input type="number" step="any" name="ma50" placeholder="e.g. 99.8" required />
+        </div>
+        <button type="submit">Predict Closing Price</button>
+    </form>
+
+    {% if prediction %}
+    <div class="result">
+        Predicted Close Price: <strong>${{ prediction }}</strong>
+    </div>
+    {% endif %}
+
+    <div class="graphs">
+        <img src="{{ url_for('static', filename='graphs/ma_plot.png') }}" alt="Moving Averages" />
+        <img src="{{ url_for('static', filename='graphs/feature_importance.png') }}" alt="Feature Importance" />
+        <img src="{{ url_for('static', filename='graphs/corr_heatmap.png') }}" alt="Correlation Heatmap" />
+        <img src="{{ url_for('static', filename='graphs/predicted_vs_actual.png') }}" alt="Predicted vs Actual" />
+    </div>
+
+    <footer>&copy; 2025 Stock Predictor App.
+         Built with Machine learning & Flask...</footer>
+</div>
+</body>
+</html>
